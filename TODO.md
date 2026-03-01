@@ -1,18 +1,13 @@
-# Animations Implementation TODO
+# Forgot Password Flow Implementation
 
-- [x] Plan animations for task addition, deletion, and progress bar
-- [ ] Add transition-group CSS classes to main.css
-- [ ] Update Tasks.vue to use TransitionGroup for animations
-- [ ] Verify progress bar animation works correctly
+## Task
+Implement a proper Forgot Password flow so that clicking "Forgot Password?" on the Login page navigates to a Reset Password page where the user can enter their registered email and new password, update it in localStorage, and then redirect back to the Login page without navigating to the Create Account page.
 
-## Implementation Details:
+## Plan
 
-### Task Addition (Slide-in)
-- Use Vue 3 `<TransitionGroup>` with `v-move` class
-- Add `.todo-enter-active` and `.todo-enter-from` classes for slide-in from left
+- [x] Analyze the existing code in Login.vue, ForgotPassword.vue, Registration.vue, and App.vue
+- [ ] Fix the conditional rendering logic in App.vue to properly prioritize Login, ForgotPassword, and Registration components
 
-### Task Deletion (Fade-out)
-- Add `.todo-leave-active` and `.todo-leave-to` classes for fade-out animation
-
-### Progress Bar
-- Already has CSS transition, will verify smooth animation
+## Status
+- Analysis: COMPLETE
+- Implementation: IN PROGRESS

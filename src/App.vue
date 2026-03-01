@@ -3,6 +3,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Registration from './components/Registration.vue'
 import Login from './components/Login.vue'
+import ForgotPassword from './components/ForgotPassword.vue'
 import Sidebar from './components/Sidebar.vue'
 import Dashboard from './views/Dashboard.vue'
 import Tasks from './views/Tasks.vue'
@@ -20,6 +21,7 @@ const editingId = ref(null)
 const currentUser = ref(null)
 const showRegistration = ref(false)
 const showLogin = ref(false)
+const showForgotPassword = ref(false)
 
 // User name personalization
 const userName = ref('')
@@ -107,13 +109,27 @@ const handleLoginSuccess = () => {
 // Handle navigation to login
 const handleGoToLogin = () => {
   showRegistration.value = false
+  showForgotPassword.value = false
   showLogin.value = true
 }
 
 // Handle navigation to registration
 const handleGoToRegister = () => {
   showLogin.value = false
+  showForgotPassword.value = false
   showRegistration.value = true
+}
+
+// Handle navigation to forgot password
+const handleGoToForgotPassword = () => {
+  showLogin.value = false
+  showForgotPassword.value = true
+}
+
+// Handle password reset success
+const handlePasswordResetSuccess = () => {
+  showForgotPassword.value = false
+  showLogin.value = true
 }
 
 // Logout function
@@ -123,8 +139,9 @@ const handleLogout = () => {
   name.value = ''
   userName.value = ''
   todos.value = []
-  showRegistration.value = true
-  showLogin.value = false
+  showLogin.value = true
+  showRegistration.value = false
+  showForgotPassword.value = false
   router.push('/')
 }
 
@@ -207,14 +224,22 @@ const closeNamePrompt = () => {
 </script>
 
 <template>
+  <!-- Auth Components: Show only one at a time with correct priority -->
   <Login 
-    v-if="showLogin" 
+    v-if="showLogin || (!isAuthenticated && !showRegistration && !showForgotPassword)" 
     @login-success="handleLoginSuccess"
     @go-to-register="handleGoToRegister"
+    @go-to-forgot-password="handleGoToForgotPassword"
   />
   
+  <ForgotPassword
+    v-else-if="showForgotPassword"
+    @password-reset-success="handlePasswordResetSuccess"
+    @back-to-login="handleGoToLogin"
+  />
+
   <Registration 
-    v-else-if="showRegistration || !isAuthenticated" 
+    v-else-if="showRegistration"
     @registration-success="handleRegistrationSuccess"
     @go-to-login="handleGoToLogin"
   />

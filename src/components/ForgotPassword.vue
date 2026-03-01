@@ -1,17 +1,22 @@
 <script setup>
 import { ref, onMounted, defineEmits } from 'vue'
 
-const emit = defineEmits(['login-success', 'go-to-register', 'go-to-forgot-password'])
+const emit = defineEmits(['password-reset-success', 'back-to-login'])
 
 const formData = ref({
   email: '',
-  password: ''
+  newPassword: '',
+  confirmPassword: ''
 })
 
 const errors = ref({
   email: '',
-  password: ''
+  newPassword: '',
+  confirmPassword: ''
 })
+
+const successMessage = ref('')
+const isLoading = ref(false)
 
 // Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -21,7 +26,8 @@ const validateForm = () => {
   let isValid = true
   errors.value = {
     email: '',
-    password: ''
+    newPassword: '',
+    confirmPassword: ''
   }
 
   // Email validation
@@ -33,9 +39,21 @@ const validateForm = () => {
     isValid = false
   }
 
-  // Password validation
-  if (!formData.value.password) {
-    errors.value.password = 'Password is required'
+  // New password validation
+  if (!formData.value.newPassword) {
+    errors.value.newPassword = 'New password is required'
+    isValid = false
+  } else if (formData.value.newPassword.length < 6) {
+    errors.value.newPassword = 'Password must be at least 6 characters'
+    isValid = false
+  }
+
+  // Confirm password validation
+  if (!formData.value.confirmPassword) {
+    errors.value.confirmPassword = 'Please confirm your password'
+    isValid = false
+  } else if (formData.value.newPassword !== formData.value.confirmPassword) {
+    errors.value.confirmPassword = 'Passwords do not match'
     isValid = false
   }
 
@@ -48,35 +66,41 @@ const handleSubmit = () => {
     return
   }
 
+  isLoading.value = true
+
   // Get existing users from localStorage
   const existingUsers = JSON.parse(localStorage.getItem('users') || '[]')
 
   // Find user with matching email (case-insensitive)
-  const user = existingUsers.find(
+  const userIndex = existingUsers.findIndex(
     user => user.email.toLowerCase() === formData.value.email.toLowerCase()
   )
 
   // Check if user exists
-  if (!user) {
+  if (userIndex === -1) {
     errors.value.email = 'No account found with this email address'
+    isLoading.value = false
     return
   }
 
-  // Check if password matches
-  if (user.password !== formData.value.password) {
-    errors.value.password = 'Incorrect password'
-    return
-  }
+  // Update the user's password
+  existingUsers[userIndex].password = formData.value.newPassword
+  localStorage.setItem('users', JSON.stringify(existingUsers))
 
-  // Set current user as logged in (without password)
-  localStorage.setItem('currentUser', JSON.stringify({
-    id: user.id,
-    name: user.name,
-    email: user.email
-  }))
+  // Show success message
+  successMessage.value = 'Password has been reset successfully!'
 
-  // Emit success event to parent
-  emit('login-success')
+  // Emit success event
+  setTimeout(() => {
+    emit('password-reset-success')
+  }, 1500)
+
+  isLoading.value = false
+}
+
+// Handle back to login
+const handleBackToLogin = () => {
+  emit('back-to-login')
 }
 
 // Initialize dark mode on component mount
@@ -89,12 +113,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="login-container">
-    <div class="login-card">
-      <h2 class="login-title">Welcome Back</h2>
-      <p class="login-subtitle">Login to manage your todos</p>
+  <div class="forgot-password-container">
+    <div class="forgot-password-card">
+      <h2 class="forgot-password-title">Reset Password</h2>
+      <p class="forgot-password-subtitle">Enter your email and new password</p>
 
-      <form @submit.prevent="handleSubmit" class="login-form">
+      <!-- Success Message -->
+      <div v-if="successMessage" class="success-message">
+        {{ successMessage }}
+      </div>
+
+      <form @submit.prevent="handleSubmit" class="forgot-password-form" v-else>
         <!-- Email Field -->
         <div class="form-group">
           <label for="email">Email Address</label>
@@ -108,30 +137,40 @@ onMounted(() => {
           <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
         </div>
 
-        <!-- Password Field -->
+        <!-- New Password Field -->
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="newPassword">New Password</label>
           <input
             type="password"
-            id="password"
-            v-model="formData.password"
-            placeholder="Enter your password"
-            :class="{ 'input-error': errors.password }"
+            id="newPassword"
+            v-model="formData.newPassword"
+            placeholder="Enter new password"
+            :class="{ 'input-error': errors.newPassword }"
           />
-          <span v-if="errors.password" class="error-message">{{ errors.password }}</span>
+          <span v-if="errors.newPassword" class="error-message">{{ errors.newPassword }}</span>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            v-model="formData.confirmPassword"
+            placeholder="Confirm new password"
+            :class="{ 'input-error': errors.confirmPassword }"
+          />
+          <span v-if="errors.confirmPassword" class="error-message">{{ errors.confirmPassword }}</span>
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="login-btn">Login</button>
+        <button type="submit" class="reset-btn" :disabled="isLoading">
+          {{ isLoading ? 'Resetting...' : 'Reset Password' }}
+        </button>
 
-        <!-- Forgot Password Link -->
-        <p class="forgot-password-link">
-          <a href="#" @click.prevent="emit('go-to-forgot-password')">Forgot Password?</a>
-        </p>
-
-        <!-- Register Link -->
-        <p class="register-link">
-          Don't have an account? <a href="#" @click.prevent="emit('go-to-register')">Register here</a>
+        <!-- Back to Login Link -->
+        <p class="back-link">
+          Remember your password? <a href="#" @click.prevent="handleBackToLogin">Login here</a>
         </p>
       </form>
     </div>
@@ -139,7 +178,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.login-container {
+.forgot-password-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -149,11 +188,11 @@ onMounted(() => {
   transition: background 0.3s ease;
 }
 
-.dark .login-container {
+.dark .forgot-password-container {
   background: var(--gradient-bg);
 }
 
-.login-card {
+.forgot-password-card {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -166,11 +205,11 @@ onMounted(() => {
   transition: background-color 0.3s ease;
 }
 
-.dark .login-card {
+.dark .forgot-password-card {
   background: var(--glass-bg-strong);
 }
 
-.login-title {
+.forgot-password-title {
   color: var(--dark);
   font-size: 1.75rem;
   font-weight: 700;
@@ -178,11 +217,33 @@ onMounted(() => {
   margin-bottom: 0.5rem;
 }
 
-.login-subtitle {
+.forgot-password-subtitle {
   color: var(--grey);
   text-align: center;
   margin-bottom: 2rem;
   font-size: 0.9rem;
+}
+
+.success-message {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .form-group {
@@ -231,7 +292,7 @@ onMounted(() => {
   font-weight: 500;
 }
 
-.login-btn {
+.reset-btn {
   display: block;
   width: 100%;
   font-size: 1rem;
@@ -245,46 +306,34 @@ onMounted(() => {
   margin-top: 1.5rem;
 }
 
-.login-btn:hover {
+.reset-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 5px 20px rgba(234, 64, 164, 0.4);
 }
 
-.login-btn:active {
+.reset-btn:active {
   transform: translateY(0);
 }
 
-.register-link {
+.reset-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.back-link {
   text-align: center;
   margin-top: 1.5rem;
   color: var(--grey);
   font-size: 0.875rem;
 }
 
-.register-link a {
+.back-link a {
   color: var(--primary);
   text-decoration: none;
   font-weight: 600;
 }
 
-.register-link a:hover {
-  text-decoration: underline;
-}
-
-.forgot-password-link {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.forgot-password-link a {
-  color: var(--grey);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.forgot-password-link a:hover {
-  color: var(--primary);
+.back-link a:hover {
   text-decoration: underline;
 }
 </style>
