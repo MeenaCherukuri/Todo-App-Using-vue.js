@@ -1,16 +1,78 @@
 :root {
 	--primary: #EA40A4;
-	--business: #3A82EE;
+	--professional: #3A82EE;
 	--personal: var(--primary);
 	--light: #EEE;
 	--grey: #888;
 	--dark: #313154;
 	--danger: #ff5b57;
+	--background: #f5f5f5;
+	--card-bg: #FFFFFF;
 
 	--shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-	--business-glow: 0px 0px 4px rgba(58, 130, 238, 0.75);
+	--professional-glow: 0px 0px 4px rgba(58, 130, 238, 0.75);
 	--personal-glow: 0px 0px 4px rgba(234, 64, 164, 0.75);
+	
+	--priority-high: #ff5b57;
+	--priority-medium: #ffbf00;
+	--priority-low: #3A82EE;
+
+	/* Enhanced Shadow and Glow Variables */
+	--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+	--shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+	--shadow-xl: 0 12px 36px rgba(0, 0, 0, 0.2);
+
+	/* Hover Elevation Shadows */
+	--shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+	--shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.18);
+
+	/* Soft Glow Effects */
+	--glow-primary: 0 0 20px rgba(234, 64, 164, 0.4);
+	--glow-professional: 0 0 20px rgba(58, 130, 238, 0.4);
+	--glow-subtle: 0 0 15px rgba(234, 64, 164, 0.25);
+	--glow-hover: 0 4px 20px rgba(234, 64, 164, 0.35);
+
+	/* Transition Variables */
+	--transition-fast: 0.15s ease;
+	--transition-base: 0.2s ease;
+	--transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Glassmorphism Variables */
+	--glass-bg: rgba(255, 255, 255, 0.7);
+	--glass-bg-strong: rgba(255, 255, 255, 0.85);
+	--glass-border: rgba(255, 255, 255, 0.3);
+	--glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+	--glass-blur: blur(10px);
+	--glass-blur-strong: blur(20px);
+	
+	/* Gradient Background */
+	--gradient-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	--gradient-bg-soft: linear-gradient(135deg, #e0e5ec 0%, #f5f7fa 100%);
+	--gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	--gradient-warm: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+	--gradient-cool: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Dark Mode Variables */
+.dark {
+	--light: #1a1a2e;
+	--dark: #e8e8e8;
+	--grey: #a0a0a0;
+	--background: #16213e;
+	--card-bg: #1f2937;
+	--shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	
+	/* Glassmorphism Dark Mode */
+	--glass-bg: rgba(31, 41, 55, 0.7);
+	--glass-bg-strong: rgba(31, 41, 55, 0.85);
+	--glass-border: rgba(255, 255, 255, 0.1);
+	--glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	
+	/* Gradient Background Dark Mode */
+	--gradient-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+	--gradient-bg-soft: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
 }
 
 * {
@@ -29,8 +91,10 @@ input:not([type="radio"]):not([type="checkbox"]), button {
 }
 
 body {
-	background: var(--light);
+	background: var(--gradient-bg);
 	color: var(--dark);
+	transition: background-color 0.3s ease, color 0.3s ease;
+	min-height: 100vh;
 }
 
 section {
@@ -77,10 +141,11 @@ h4 {
 	font-size: 1.125rem;
 	padding: 1rem 1.5rem;
 	color: var(--dark);
-	background-color: #FFF;
+	background-color: var(--card-bg);
 	border-radius: 0.5rem;
 	box-shadow: var(--shadow);
 	margin-bottom: 1.5rem;
+	transition: background-color 0.3s ease;
 }
 
 .create-todo .options {
@@ -90,16 +155,21 @@ h4 {
 	margin-bottom: 1.5rem;
 }
 
+.create-todo .options.priority-options {
+	grid-template-columns: repeat(3, 1fr);
+}
+
 .create-todo .options label {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	padding: 1.5rem;
-	background-color: #FFF;
+	background-color: var(--card-bg);
 	border-radius: 0.5rem;
 	box-shadow: var(--shadow);
 	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 input[type="radio"],
@@ -114,8 +184,8 @@ input[type="checkbox"] {
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
-	border: 2px solid var(--business);
-	box-shadow: var(--business-glow);
+	border: 2px solid var(--professional);
+	box-shadow: var(--professional-glow);
 }
 
 .bubble.personal {
@@ -129,8 +199,8 @@ input[type="checkbox"] {
 	opacity: 0;
 	width: 0px;
 	height: 0px;
-	background-color: var(--business);
-	box-shadow: var(--business-glow);
+	background-color: var(--professional);
+	box-shadow: var(--professional-glow);
 	border-radius: 50%;
 	transition: 0.2s ease-in-out;
 }
@@ -141,6 +211,62 @@ input[type="checkbox"] {
 }
 
 input:checked ~ .bubble::after {
+	width: 10px;
+	height: 10px;
+	opacity: 1;
+}
+
+/* Priority bubble styles */
+.bubble-priority {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	border: 2px solid var(--priority-medium);
+	box-shadow: 0px 0px 4px rgba(255, 191, 0, 0.5);
+}
+
+.bubble-priority.high {
+	border-color: var(--priority-high);
+	box-shadow: 0px 0px 4px rgba(255, 91, 87, 0.5);
+}
+
+.bubble-priority.medium {
+	border-color: var(--priority-medium);
+	box-shadow: 0px 0px 4px rgba(255, 191, 0, 0.5);
+}
+
+.bubble-priority.low {
+	border-color: var(--priority-low);
+	box-shadow: 0px 0px 4px rgba(58, 130, 238, 0.5);
+}
+
+.bubble-priority::after {
+	content: "";
+	display: block;
+	opacity: 0;
+	width: 0px;
+	height: 0px;
+	background-color: var(--priority-medium);
+	border-radius: 50%;
+	transition: 0.2s ease-in-out;
+}
+
+.bubble-priority.high::after {
+	background-color: var(--priority-high);
+}
+
+.bubble-priority.medium::after {
+	background-color: var(--priority-medium);
+}
+
+.bubble-priority.low::after {
+	background-color: var(--priority-low);
+}
+
+input:checked ~ .bubble-priority::after {
 	width: 10px;
 	height: 10px;
 	opacity: 1;
@@ -169,6 +295,73 @@ input:checked ~ .bubble::after {
 	opacity: 0.75;
 }
 
+/* Search and Filter Section */
+.search-filter {
+	background-color: var(--card-bg);
+	padding: 1.5rem;
+	border-radius: 0.5rem;
+	box-shadow: var(--shadow);
+	transition: background-color 0.3s ease;
+}
+
+.filter-controls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	align-items: center;
+}
+
+.search-input {
+	flex: 1 1 200px;
+	font-size: 1rem;
+	padding: 0.75rem 1rem;
+	color: var(--dark);
+	background-color: var(--light);
+	border-radius: 0.5rem;
+	min-width: 150px;
+	transition: background-color 0.3s ease;
+}
+
+.search-input:focus {
+	outline: 2px solid var(--primary);
+}
+
+.filter-select {
+	font-size: 0.875rem;
+	padding: 0.75rem 1rem;
+	color: var(--dark);
+	background-color: var(--light);
+	border-radius: 0.5rem;
+	cursor: pointer;
+	min-width: 120px;
+	transition: background-color 0.3s ease;
+}
+
+.filter-select:focus {
+	outline: 2px solid var(--primary);
+}
+
+.clear-filters {
+	font-size: 0.875rem;
+	padding: 0.75rem 1rem;
+	color: #FFF;
+	background-color: var(--grey);
+	border-radius: 0.5rem;
+	cursor: pointer;
+	transition: 0.2s ease-in-out;
+}
+
+.clear-filters:hover {
+	background-color: var(--dark);
+}
+
+.filter-count {
+	margin-top: 1rem;
+	font-size: 0.875rem;
+	color: var(--grey);
+}
+
+/* Todo List Styles */
 .todo-list .list {
 	margin: 1rem 0;
 } 
@@ -176,11 +369,12 @@ input:checked ~ .bubble::after {
 .todo-list .todo-item {
 	display: flex;
 	align-items: center;
-	background-color: #FFF;
+	background-color: var(--card-bg);
 	padding: 1rem;
 	border-radius: 0.5rem;
 	box-shadow: var(--shadow);
 	margin-bottom: 1rem;
+	transition: background-color 0.3s ease;
 }
 
 .todo-item label {
@@ -191,11 +385,57 @@ input:checked ~ .bubble::after {
 
 .todo-item .todo-content {
 	flex: 1 1 0%;
+	cursor: pointer;
 }
 
 .todo-item .todo-content input {
 	color: var(--dark);
 	font-size: 1.125rem;
+	width: 100%;
+}
+
+.todo-item .todo-text {
+	color: var(--dark);
+	font-size: 1.125rem;
+	display: block;
+	width: 100%;
+}
+
+.todo-item .todo-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin-top: 0.25rem;
+}
+
+.todo-item .todo-deadline {
+	display: block;
+	font-size: 0.875rem;
+	color: var(--grey);
+}
+
+.todo-item .todo-priority {
+	display: block;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding: 0.125rem 0.5rem;
+	border-radius: 0.25rem;
+}
+
+.todo-item .todo-priority.priority-high {
+	color: var(--priority-high);
+	background-color: rgba(255, 91, 87, 0.1);
+}
+
+.todo-item .todo-priority.priority-medium {
+	color: var(--priority-medium);
+	background-color: rgba(255, 191, 0, 0.1);
+}
+
+.todo-item .todo-priority.priority-low {
+	color: var(--priority-low);
+	background-color: rgba(58, 130, 238, 0.1);
 }
 
 .todo-item .actions {
@@ -221,6 +461,10 @@ input:checked ~ .bubble::after {
 	background-color: var(--primary);
 }
 
+.todo-item .actions .edit.save {
+	background-color: #4CAF50;
+}
+
 .todo-item .actions .delete {
 	background-color: var(--danger);
 }
@@ -228,4 +472,319 @@ input:checked ~ .bubble::after {
 .todo-item.done .todo-content input {
 	text-decoration: line-through;
 	color: var(--grey);
+}
+
+.todo-item.done .todo-text {
+	text-decoration: line-through;
+	color: var(--grey);
+}
+
+.create-todo input[type="date"] {
+	display: block;
+	width: 100%;
+	font-size: 1.125rem;
+	padding: 1rem 1.5rem;
+	color: var(--dark);
+	background-color: var(--card-bg);
+	border-radius: 0.5rem;
+	box-shadow: var(--shadow);
+	margin-bottom: 1.5rem;
+	transition: background-color 0.3s ease;
+}
+
+/* Dashboard Section - Modern SaaS Style */
+.dashboard {
+	background-color: var(--card-bg);
+	padding: 1.5rem;
+	border-radius: 1rem;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s ease;
+}
+
+.dashboard:hover {
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard h3 {
+	margin-bottom: 1.25rem;
+	font-size: 1.125rem;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	color: var(--grey);
+}
+
+.dashboard-stats {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.25rem;
+	margin-bottom: 1.5rem;
+}
+
+/* Modern SaaS-style Stat Cards */
+.stat-card {
+	display: flex;
+	align-items: center;
+	padding: 1.25rem 1.5rem;
+	border-radius: 1rem;
+	background-color: var(--light);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
+	overflow: hidden;
+}
+
+/* Colored status indicators - gradient left border */
+.stat-card::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 4px;
+	border-radius: 4px 0 0 4px;
+}
+
+.stat-card.total::before {
+	background: linear-gradient(180deg, #3A82EE 0%, #2563EB 100%);
+}
+
+.stat-card.completed::before {
+	background: linear-gradient(180deg, #10B981 0%, #059669 100%);
+}
+
+.stat-card.overdue::before {
+	background: linear-gradient(180deg, #EF4444 0%, #DC2626 100%);
+}
+
+/* Soft shadow with layered effect */
+.stat-card {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.stat-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Status-specific card backgrounds with subtle tints */
+.stat-card.total {
+	background: linear-gradient(135deg, rgba(58, 130, 238, 0.08) 0%, rgba(58, 130, 238, 0.03) 100%);
+}
+
+.stat-card.completed {
+	background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.03) 100%);
+}
+
+.stat-card.overdue {
+	background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.03) 100%);
+}
+
+.stat-card .stat-icon {
+	font-size: 2.25rem;
+	margin-right: 1rem;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0.75rem;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.stat-card.total .stat-icon {
+	background: linear-gradient(135deg, rgba(58, 130, 238, 0.15) 0%, rgba(58, 130, 238, 0.08) 100%);
+}
+
+.stat-card.completed .stat-icon {
+	background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%);
+}
+
+.stat-card.overdue .stat-icon {
+	background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.08) 100%);
+}
+
+.stat-card .stat-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.stat-card .stat-value {
+	font-size: 1.75rem;
+	font-weight: 700;
+	color: var(--dark);
+	line-height: 1.2;
+}
+
+.stat-card .stat-label {
+	font-size: 0.875rem;
+	color: var(--grey);
+	font-weight: 500;
+	margin-top: 0.25rem;
+}
+
+/* Progress Section */
+.progress-section {
+	background: linear-gradient(135deg, rgba(58, 130, 238, 0.05) 0%, rgba(234, 64, 164, 0.05) 100%);
+	padding: 1.25rem 1.5rem;
+	border-radius: 1rem;
+	transition: all 0.3s ease;
+}
+
+.progress-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.progress-label {
+	font-size: 0.9375rem;
+	font-weight: 600;
+	color: var(--dark);
+}
+
+.progress-percentage {
+	font-size: 1.5rem;
+	font-weight: 700;
+	background: linear-gradient(90deg, var(--professional) 0%, var(--primary) 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.progress-bar-container {
+	width: 100%;
+	height: 14px;
+	background-color: rgba(0, 0, 0, 0.08);
+	border-radius: 7px;
+	overflow: hidden;
+	position: relative;
+}
+
+.progress-bar-container::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+	pointer-events: none;
+}
+
+.progress-bar {
+	height: 100%;
+	background: linear-gradient(90deg, var(--professional) 0%, #8B5CF6 50%, var(--primary) 100%);
+	border-radius: 7px;
+	transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
+	box-shadow: 0 2px 8px rgba(58, 130, 238, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Animated shine effect on progress bar */
+.progress-bar::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+	animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+/* ========================================
+   Vue 3 Transition Group Animations
+   ======================================== */
+
+/* Task List TransitionGroup Container */
+.todo-list-transition-group {
+  position: relative;
+}
+
+/* Task Item Enter Animation (Slide-in) */
+.todo-enter-active {
+  animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.todo-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* Task Item Leave Animation (Fade-out) */
+.todo-leave-active {
+  animation: fadeOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  width: 100%;
+}
+
+.todo-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* Move animation for reordering */
+.todo-move {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slide-in from left keyframes */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade-out to right keyframes */
+@keyframes fadeOutRight {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+/* Enhanced Progress Bar Animation */
+.progress-bar-animated {
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive Dashboard */
+@media (max-width: 768px) {
+	.dashboard-stats {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+	
+	.stat-card {
+		padding: 1rem 1.25rem;
+	}
+	
+	.stat-card .stat-value {
+		font-size: 1.5rem;
+	}
+	
+	.stat-card .stat-icon {
+		font-size: 1.75rem;
+		width: 40px;
+		height: 40px;
+	}
 }
