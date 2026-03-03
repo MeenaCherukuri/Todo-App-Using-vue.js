@@ -193,6 +193,7 @@ const cancelEditing = () => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .name-edit input {
@@ -202,6 +203,8 @@ const cancelEditing = () => {
   background-color: var(--light);
   border-radius: 0.5rem;
   border: 2px solid var(--primary);
+  flex: 1;
+  min-width: 150px;
 }
 
 .name-edit input:focus {
@@ -347,18 +350,174 @@ const cancelEditing = () => {
   font-weight: 600;
 }
 
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .profile-header {
     flex-direction: column;
     text-align: center;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .avatar-icon {
+    font-size: 2.5rem;
+  }
+  
+  .profile-info h2 {
+    font-size: 1.5rem;
   }
   
   .name-display {
     justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .name-edit {
+    justify-content: center;
+  }
+  
+  .name-edit input {
+    width: 100%;
+    min-width: unset;
   }
   
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .stat-item {
+    padding: 1rem;
+  }
+  
+  .stat-icon {
+    font-size: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .stat-label {
+    font-size: 0.6875rem;
+  }
+  
+  .profile-stats,
+  .profile-section {
+    padding: 1.25rem;
+  }
+  
+  .profile-stats h3,
+  .profile-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-header {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+  
+  .avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .avatar-icon {
+    font-size: 2rem;
+  }
+  
+  .profile-info h2 {
+    font-size: 1.25rem;
+  }
+  
+  .email {
+    font-size: 0.8125rem;
+  }
+  
+  .edit-name-btn {
+    font-size: 0.8125rem;
+    padding: 0.25rem 0.625rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+  }
+  
+  .stat-item {
+    padding: 0.875rem;
+  }
+  
+  .stat-icon {
+    font-size: 1.25rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .stat-number {
+    font-size: 1.25rem;
+  }
+  
+  .stat-label {
+    font-size: 0.625rem;
+  }
+  
+  .profile-stats,
+  .profile-section {
+    padding: 1rem;
+  }
+  
+  .info-card {
+    padding: 0.875rem;
+  }
+  
+  .info-row {
+    padding: 0.625rem 0;
+  }
+  
+  .info-label,
+  .info-value {
+    font-size: 0.8125rem;
+  }
+  
+  .save-btn,
+  .cancel-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .edit-name-btn,
+  .save-btn,
+  .cancel-btn {
+    min-height: 44px;
+  }
+  
+  .stat-item:hover {
+    transform: none;
+  }
+  
+  .edit-name-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .save-btn:active,
+  .cancel-btn:active {
+    transform: scale(0.98);
   }
 }
 </style>

@@ -299,4 +299,117 @@ const displayName = computed(() => {
   transform: scale(1.02);
   box-shadow: 0 4px 15px rgba(255, 91, 87, 0.35);
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+  }
+  
+  .sidebar-overlay.mobile-open {
+    display: block;
+  }
+}
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 101;
+  width: 44px;
+  height: 44px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--glass-bg-strong);
+  transform: scale(1.05);
+}
+
+.mobile-menu-toggle span {
+  font-size: 1.25rem;
+  color: var(--dark);
+}
+
+@media (max-width: 1024px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .sidebar-overlay {
+    display: none;
+  }
+  
+  .sidebar-overlay.mobile-open {
+    display: block;
+  }
+}
+
+/* Mobile Sidebar Adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+  }
+  
+  .nav-item {
+    padding: 0.75rem 1rem;
+  }
+  
+  .nav-icon {
+    font-size: 1.125rem;
+  }
+  
+  .nav-text {
+    font-size: 0.9375rem;
+  }
+  
+  .user-card {
+    padding: 0.625rem;
+  }
+  
+  .footer-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .theme-btn,
+  .logout-btn {
+    flex: none;
+    padding: 0.625rem;
+  }
+}
+
+/* Main content mobile adjustment */
+@media (max-width: 1024px) {
+  .main-content.mobile-open {
+    margin-left: 0;
+  }
+}
 </style>

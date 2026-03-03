@@ -575,4 +575,161 @@ const goToAddTask = () => {
   box-shadow: var(--glass-shadow);
   border: 1px solid var(--glass-border);
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 1024px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-input {
+    flex: 1 1 100%;
+  }
+  
+  .filter-select {
+    width: 100%;
+  }
+  
+  .clear-filters {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-filter {
+    padding: 1rem;
+  }
+  
+  .search-filter h3 {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .filter-controls {
+    gap: 0.625rem;
+  }
+  
+  .search-input,
+  .filter-select,
+  .clear-filters {
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+  }
+  
+  .quick-actions {
+    margin: 1rem 0;
+  }
+  
+  .add-task-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .todo-list {
+    margin-top: 1rem;
+  }
+  
+  .todo-list h3 {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .todo-list .todo-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.875rem;
+    gap: 0.75rem;
+  }
+  
+  .todo-item label {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  
+  .todo-item .todo-content {
+    width: 100%;
+  }
+  
+  .todo-item .todo-content input,
+  .todo-item .todo-text {
+    font-size: 1rem;
+  }
+  
+  .todo-item .todo-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .todo-item .todo-deadline,
+  .todo-item .todo-priority {
+    font-size: 0.75rem;
+  }
+  
+  .todo-item .actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--light);
+  }
+  
+  .todo-item .actions button {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+  }
+  
+  .todo-item .actions .edit {
+    margin-right: 0.5rem;
+  }
+  
+  .filter-count {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-filter {
+    padding: 0.875rem;
+  }
+  
+  .todo-list .todo-item {
+    padding: 0.75rem;
+  }
+  
+  .todo-item .todo-content input,
+  .todo-item .todo-text {
+    font-size: 0.9375rem;
+  }
+  
+  .todo-item .actions button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .empty-state {
+    padding: 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .add-task-btn,
+  .clear-filters,
+  .todo-item label,
+  .todo-item .actions button {
+    min-height: 44px;
+  }
+  
+  .todo-list .todo-item:hover {
+    transform: none;
+  }
+  
+  .add-task-btn:active,
+  .clear-filters:active {
+    transform: scale(0.98);
+  }
+}
 </style>

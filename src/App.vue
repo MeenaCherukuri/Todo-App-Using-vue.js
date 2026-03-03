@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import Registration from './components/Registration.vue'
 import Login from './components/Login.vue'
 import ForgotPassword from './components/ForgotPassword.vue'
@@ -12,6 +12,7 @@ import Profile from './views/Profile.vue'
 import Settings from './views/Settings.vue'
 
 const router = useRouter()
+const route = useRoute()
 
 const todos = ref([])
 const name = ref('')
@@ -29,6 +30,19 @@ const showNamePrompt = ref(false)
 
 // Dark mode state
 const isDarkMode = ref(false)
+
+// Mobile sidebar state
+const isMobileSidebarOpen = ref(false)
+
+// Toggle mobile sidebar
+const toggleMobileSidebar = () => {
+  isMobileSidebarOpen.value = !isMobileSidebarOpen.value
+}
+
+// Close mobile sidebar when route changes
+watch(() => route.path, () => {
+  isMobileSidebarOpen.value = false
+})
 
 // Compute greeting based on time of day
 const greeting = computed(() => {
@@ -246,6 +260,23 @@ const closeNamePrompt = () => {
   
   <!-- SaaS Layout with Sidebar -->
   <div v-else class="app-layout">
+    <!-- Mobile Menu Toggle Button -->
+    <button 
+      class="mobile-menu-toggle show-mobile-only" 
+      @click="toggleMobileSidebar"
+      aria-label="Toggle menu"
+    >
+      <span v-if="!isMobileSidebarOpen">☰</span>
+      <span v-else>✕</span>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div 
+      v-if="isMobileSidebarOpen" 
+      class="sidebar-overlay"
+      @click="toggleMobileSidebar"
+    ></div>
+
     <!-- Name Prompt Modal -->
     <div v-if="showNamePrompt" class="name-prompt-overlay">
       <div class="name-prompt-modal">
@@ -267,6 +298,7 @@ const closeNamePrompt = () => {
 
     <!-- Sidebar -->
     <Sidebar 
+      :class="{ 'mobile-open': isMobileSidebarOpen }"
       :is-dark-mode="isDarkMode"
       :user-name="userName"
       :name="name"
@@ -276,7 +308,7 @@ const closeNamePrompt = () => {
     />
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" :class="{ 'mobile-open': isMobileSidebarOpen }">
       <Dashboard 
         :todos="todos"
         :user-name="userName"
@@ -325,6 +357,50 @@ const closeNamePrompt = () => {
   padding: 2rem;
   min-height: 100vh;
   overflow-y: auto;
+  transition: margin-left 0.3s ease;
+}
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 101;
+  width: 44px;
+  height: 44px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--glass-bg-strong);
+  transform: scale(1.05);
+}
+
+.mobile-menu-toggle span {
+  font-size: 1.25rem;
+  color: var(--dark);
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
 }
 
 /* Name Prompt Modal Styles */
@@ -425,6 +501,57 @@ const closeNamePrompt = () => {
   .main-content {
     margin-left: 0;
     padding: 1.5rem;
+    padding-top: 5rem;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .sidebar-overlay {
+    display: block;
+  }
+  
+  .show-mobile-only {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+    padding-top: 4.5rem;
+  }
+  
+  .name-prompt-modal {
+    padding: 1.5rem;
+  }
+  
+  .name-prompt-modal h3 {
+    font-size: 1.25rem;
+  }
+  
+  .name-prompt-actions {
+    flex-direction: column;
+  }
+  
+  .save-name-btn,
+  .skip-name-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0.75rem;
+    padding-top: 4rem;
+  }
+  
+  .mobile-menu-toggle {
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

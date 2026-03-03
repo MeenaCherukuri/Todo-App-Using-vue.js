@@ -318,9 +318,173 @@ const toggleDarkMode = () => {
   font-size: 0.875rem;
 }
 
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
+  .settings-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .settings-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .settings-section {
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .settings-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.625rem;
+  }
+  
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.75rem 0;
+  }
+  
+  .setting-info {
+    width: 100%;
+  }
+  
+  .setting-icon {
+    font-size: 1.25rem;
+  }
+  
+  .setting-text {
+    flex: 1;
+  }
+  
+  .setting-title {
+    font-size: 0.9375rem;
+  }
+  
+  .setting-description {
+    font-size: 0.6875rem;
+  }
+  
+  .toggle-switch {
+    align-self: flex-end;
+  }
+  
+  .status-badge {
+    align-self: flex-end;
+  }
+  
   .features-list {
     grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+  
+  .feature {
+    font-size: 0.8125rem;
+  }
+  
+  .shortcuts-list {
+    gap: 0.625rem;
+  }
+  
+  .shortcut {
+    padding: 0.625rem;
+    gap: 0.75rem;
+  }
+  
+  .key {
+    min-width: 50px;
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .action {
+    font-size: 0.8125rem;
+  }
+  
+  .about-card {
+    padding: 1.25rem;
+  }
+  
+  .app-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.875rem;
+  }
+  
+  .app-info h4 {
+    font-size: 1.125rem;
+  }
+  
+  .description {
+    font-size: 0.8125rem;
+    margin-bottom: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-header {
+    margin-bottom: 1.25rem;
+  }
+  
+  .settings-header h2 {
+    font-size: 1.25rem;
+  }
+  
+  .settings-header p {
+    font-size: 0.8125rem;
+  }
+  
+  .settings-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .settings-section h3 {
+    font-size: 0.9375rem;
+    margin-bottom: 0.875rem;
+  }
+  
+  .setting-item {
+    gap: 0.75rem;
+  }
+  
+  .about-card {
+    padding: 1rem;
+  }
+  
+  .app-info h4 {
+    font-size: 1rem;
+  }
+  
+  .description {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+  
+  .feature {
+    font-size: 0.8125rem;
+  }
+  
+  .feature span:first-child {
+    font-size: 0.875rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .toggle-switch {
+    min-width: 56px;
+    min-height: 28px;
+  }
+  
+  .setting-item {
+    min-height: 44px;
+  }
+  
+  .toggle-switch input:checked + .slider:active:before {
+    transform: translateX(20px);
   }
 }
 </style>
